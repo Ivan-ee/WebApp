@@ -75,7 +75,36 @@ const UserController = {
     },
 
     getUserById: async (req, res) => {
-        res.send('getUserById')
+        const {id} = req.params;
+        const userId = req.user.id;
+
+        try {
+            const user = await prisma.user.findUnique({
+                where: {id: id},
+                include: {
+                    followwers: true,
+                    following: true
+                }
+            });
+
+            if (!user) {
+                res.status(404).json({error: "Пользователь не найден"})
+            }
+
+            const isFollowing = await prisma.follows.findFirst({
+                where: {
+                    AND: [
+                        { followerId: userId },
+                        { followingId: id }
+                    ]
+                }
+            });
+            
+            res.status(200).json({...user, isFollowing: Boolean(isFollowing)});
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({error: e});
+        }
     },
     update: async (req, res) => {
         res.send('update')
