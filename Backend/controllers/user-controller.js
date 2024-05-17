@@ -94,12 +94,12 @@ const UserController = {
             const isFollowing = await prisma.follows.findFirst({
                 where: {
                     AND: [
-                        { followerId: userId },
-                        { followingId: id }
+                        {followerId: userId},
+                        {followingId: id}
                     ]
                 }
             });
-            
+
             res.status(200).json({...user, isFollowing: Boolean(isFollowing)});
         } catch (e) {
             console.error(e);
@@ -107,7 +107,47 @@ const UserController = {
         }
     },
     update: async (req, res) => {
-        res.send('update')
+        const {id} = req.params;
+        const {email, name, dateOfBirth, bio, location} = req.body;
+
+        let filePath;
+
+        if (req.file && req.file.path) {
+            filePath = req.file.path;
+        }
+
+        if (id !== req.user.userId) {
+            return res.status(401).json({error: "Нет доступа"});
+        }
+
+        try {
+
+            if (email) {
+                const existingUser = await prisma.user.findFirst({where: {email: email}})
+
+                if (existingUser && existingUser.id !== parseInt(id)) {
+                    return res.status(400).json({error: "Почта уже используется"});
+                }
+            }
+
+            const user = await prisma.user.update({
+                where: {id: id},
+                data: {
+                    email: email || undefined,
+                    name: name || undefined,
+                    avatarUrl: filePath ? `/${filePath}` : undefined,
+                    dateOfBirth: dateOfBirth || undefined,
+                    bio: bio || undefined,
+                    location: location || undefined,
+                }
+            });
+
+            res.json(user);
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({error: e});
+        }
+
     },
     current: async (req, res) => {
         res.send('current')
