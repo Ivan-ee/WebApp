@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const {UserController} = require("../controllers");
+const {UserController, PostController} = require("../controllers");
 const authToken = require("../middleware/auth");
 require('dotenv').config();
 
@@ -14,11 +14,15 @@ const storage = multer.diskStorage({
     }
 })
 
-
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 router.get('/current', authToken, UserController.current);
 router.get('/users/:id', authToken, UserController.getUserById);
 router.put('/users/:id', authToken ,UserController.update);
+
+router.post('/posts', authToken, PostController.create);
+router.get('/posts', authToken, PostController.getAll);
+router.get('/posts/:id', authToken, PostController.getById);
+router.delete('/posts/:id', authToken, PostController.delete);
 
 module.exports = router;

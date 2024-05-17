@@ -8,10 +8,10 @@ const authToken = (req, res, next) => {
         return res.status(401).json({error: 'Отсутвует токен'});
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return res.status(401).json({error: 'Invalid token'});
 
-        req.user = decoded;
+        req.user = user;
 
         next();
     });
