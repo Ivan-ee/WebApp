@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "../node_modules/.prisma/client"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -15,8 +15,58 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  email String  @unique
-  name  String?
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
+  password String
+
+  name        String?
+  avatarUrl   String?
+  dateOfBirth DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bio         String?
+  location    String?
+  posts       Post[]
+  lokes       Like[]
+  comments    Comment[]
+  followwers  Follows[] @relation("following")
+  following   Follows[] @relation("follower")
+  Follows     Follows[]
 }
 
+model Follows {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  follower    User    @relation("follower", fields: [followerId], references: [id])
+  followerId  String  @db.ObjectId
+  following   User    @relation("following", fields: [followingId], references: [id])
+  followingId String  @db.ObjectId
+  User        User?   @relation(fields: [userId], references: [id])
+  userId      String? @db.ObjectId
+}
+
+model Post {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String    @db.ObjectId
+  likes     Like[]
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+}
+
+model Like {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  user   User   @relation(fields: [useId], references: [id])
+  useId  String @db.ObjectId
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String @db.ObjectId
+}
+
+model Comment {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+  user    User   @relation(fields: [useId], references: [id])
+  useId   String @db.ObjectId
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  String @db.ObjectId
+}
