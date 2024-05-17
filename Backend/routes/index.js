@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const {UserController, PostController, CommentController} = require("../controllers");
-const authToken = require("../middleware/auth");
+const {authToken} = require("../middleware/auth");
 require('dotenv').config();
 
 const router = express.Router();

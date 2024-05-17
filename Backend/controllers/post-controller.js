@@ -75,7 +75,12 @@ const PostController = {
                 return res.status(404).json({error: 'Пост не найден'})
             }
 
-            return res.status(200).json(post);
+            const postWithLikeInfo = {
+                ...post,
+                likedByUser: post.likes.some(like => like.userId === userId)
+            };
+
+            return res.status(200).json(postWithLikeInfo);
         } catch (error) {
             console.error('err', error);
             res.status(500).json({error: error});
