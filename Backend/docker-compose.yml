@@ -12,3 +12,11 @@ services:
       MONGO_REPLICA_PORT: 27017
     ports:
       - '27017:27017'
+  webapp:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+    environment:
+      DATABASE_URL: 'mongodb://admin:123@mongo:27017/mongo?authSource=admin&directConnection=true'
