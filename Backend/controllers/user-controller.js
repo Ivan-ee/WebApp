@@ -32,7 +32,7 @@ const UserController = {
                     name: name,
                     email: email,
                     password: hashedPassword,
-                    avatarUrl: `/uploads/${avatarPath}`,
+                    avatarUrl: `/uploads/${avatarName}`,
                 }
             });
 
