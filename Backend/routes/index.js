@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const {UserController, PostController, CommentController} = require("../controllers");
+const {UserController, PostController, CommentController, LikeController} = require("../controllers");
 const {authToken} = require("../middleware/auth");
 require('dotenv').config();
 
@@ -27,5 +27,8 @@ router.delete('/posts/:id', authToken, PostController.delete);
 
 router.post('/comments', authToken, CommentController.create);
 router.delete('/comments/:id', authToken, CommentController.delete);
+
+router.post('/likes', authToken, LikeController.like);
+router.delete('/likes/:id', authToken, LikeController.unlike);
 
 module.exports = router;
