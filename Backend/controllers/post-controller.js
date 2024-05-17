@@ -53,7 +53,7 @@ const PostController = {
         }
     },
     getById: async (req, res) => {
-        const {id} = req.params ;
+        const {id} = req.params;
 
         const userId = req.user.userId;
 
@@ -71,7 +71,7 @@ const PostController = {
                 }
             });
 
-            if (!post){
+            if (!post) {
                 return res.status(404).json({error: 'Пост не найден'})
             }
 
@@ -82,7 +82,32 @@ const PostController = {
         }
     },
     delete: async (req, res) => {
-        res.status(200).send({"message": "delete"});
+        const {id} = req.params;
+
+        const userId = req.user.userId;
+
+        const post = await prisma.post.findUnique({where: {id: id}});
+
+        if (!post) {
+            return res.status(404).json({error: 'Пост не найден'})
+        }
+
+        if (post.authorId !== userId) {
+            return res.status(401).json({error: 'Нет доступа'});
+        }
+
+        try {
+            const transaction = await prisma.$transaction([
+                prisma.comment.deleteMany({where: {postId: id}}),
+                prisma.like.deleteMany({where: {postId: id}}),
+                prisma.post.delete({where: {id: id}}),
+            ]);
+
+            return res.status(200).json(transaction);
+        } catch (e) {
+            console.error('err', e);
+            res.status(500).json({error: e});
+        }
     },
 };
 
