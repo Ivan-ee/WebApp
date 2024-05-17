@@ -82,7 +82,7 @@ const UserController = {
             const user = await prisma.user.findUnique({
                 where: {id: id},
                 include: {
-                    followwers: true,
+                    followers: true,
                     following: true
                 }
             });
@@ -156,7 +156,7 @@ const UserController = {
             const user = await prisma.user.findUnique({
                 where: {id: userId},
                 include: {
-                    followwers: {
+                    followers: {
                         include: {
                             follower: true
                         }
