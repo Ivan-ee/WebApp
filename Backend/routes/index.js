@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const {UserController} = require("../controllers");
+require('dotenv').config();
 
 const router = express.Router();
 const uploadDestination = 'uploads';

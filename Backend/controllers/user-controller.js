@@ -1,8 +1,9 @@
-const { prisma } = require("../prisma/prisma-client");
+const {prisma} = require("../prisma/prisma-client");
 const jdenticon = require('jdenticon')
 const bcrypt = require('bcryptjs')
 const path = require("path");
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
 
 const UserController = {
     register: async (req, res) => {
@@ -42,9 +43,37 @@ const UserController = {
             res.status(500).json({error: e});
         }
     },
+
     login: async (req, res) => {
-        res.send('login')
+        const {email, password} = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({error: 'Все поля обязатеьны'});
+        }
+
+        try {
+            const user = await prisma.user.findUnique({where: {email: email}});
+
+            if (!user) {
+                return res.status(400).json({error: 'Такого пользователя не существует'});
+            }
+
+            const validPassword = await bcrypt.compare(password, user.password);
+
+            if (!validPassword) {
+                return res.status(400).json({error: 'Неверный логин или пароль'});
+            }
+
+            const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET)
+
+            return res.status(200).json({token});
+
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({error: e});
+        }
     },
+
     getUserById: async (req, res) => {
         res.send('getUserById')
     },
