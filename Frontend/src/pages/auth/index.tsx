@@ -1,3 +1,31 @@
+import {useState} from "react";
+import {Card, CardBody, Tab, Tabs} from "@nextui-org/react";
+import {Login} from "../../features/login";
+
 export const Auth = () => {
-    return (<div>Auth</div>)
+    const [selected, setSelected] = useState('login');
+
+    return (
+        <div className='flex items-center justify-center h-screen'>
+            <div className='flex flex-col'>
+                <Card className='max-w-full w-[340px] h-[450px]'>
+                    <CardBody className='overflow-hiddden'>
+                        <Tabs
+                            fullWidth
+                            size='md'
+                            selectedKey={selected}
+                            onSelectionChange={(key) => setSelected(key as string)}
+                        >
+                           <Tab key='login' title='Вход'>
+                               <Login setSelected={setSelected}/>
+                           </Tab>
+                            <Tab key='sing-in' title='Регистрация'>
+                                Регистрация
+                            </Tab>
+                        </Tabs>
+                    </CardBody>
+                </Card>
+            </div>
+        </div>
+    )
 }

@@ -3,11 +3,13 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
 const fs = require('fs');
 
 const app = express();
 
- app.set('view engine', 'jade');
+app.use(cors());
+app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
