@@ -2,10 +2,13 @@ import type {Action, ThunkAction} from "@reduxjs/toolkit"
 import {combineSlices, configureStore} from "@reduxjs/toolkit"
 import {setupListeners} from "@reduxjs/toolkit/query"
 import {useAppDispatch} from "./hooks";
+import {api} from "./services/api";
 
 
 export const store = configureStore({
-    reducer: {},
+    reducer: {
+        [api.reducerPath]: api.reducer
+    },
 })
 
 export type AppStore = typeof store
