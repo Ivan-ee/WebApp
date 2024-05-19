@@ -3,6 +3,7 @@ import { Card } from "../../components/cart"
 // import { CreateComment } from "../../components/layout"
 import { GoBack } from "../../components/go-back"
 import {useGetPostByIdQuery} from "../../app/services/postApi";
+import {CreateComment} from "../../components/create-comment";
 
 export const CurrentPost = () => {
     const params = useParams<{ id: string }>()
@@ -39,7 +40,7 @@ export const CurrentPost = () => {
                 createdAt={createdAt}
             />
             <div className="mt-10">
-                {/*<CreateComment />*/}
+                <CreateComment />
             </div>
             <div className="mt-10">
                 {data.comments
