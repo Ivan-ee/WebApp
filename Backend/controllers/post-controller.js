@@ -27,7 +27,7 @@ const PostController = {
         }
     },
     getAll: async (req, res) => {
-        const authorId = req.user.userId;
+        const userId = req.user.userId;
 
         try {
             const posts = await prisma.post.findMany({

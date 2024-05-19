@@ -3,24 +3,24 @@ import {Post} from "../types";
 
 export const postApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        createPost: builder.mutation<Post, { content: String }>({
+        createPost: builder.mutation<Post, { content: string }>({
             query: (postData) => ({
-                url: '/posts',
-                method: 'POST',
-                body: postData
-            })
+                url: "/posts",
+                method: "POST",
+                body: postData,
+            }),
         }),
         getAllPosts: builder.query<Post[], void>({
             query: () => ({
-                url: '/posts',
-                method: 'GET',
-            })
+                url: "/posts",
+                method: "GET",
+            }),
         }),
-        getPostById: builder.query<Post, String>({
+        getPostById: builder.query<Post, string>({
             query: (id) => ({
                 url: `/posts/${id}`,
-                method: 'POST',
-            })
+                method: "GET",
+            }),
         }),
         deletePost: builder.mutation<void, string>({
             query: (id) => ({
@@ -28,8 +28,8 @@ export const postApi = api.injectEndpoints({
                 method: "DELETE",
             }),
         }),
-    })
-});
+    }),
+})
 
 export const {
     useCreatePostMutation,

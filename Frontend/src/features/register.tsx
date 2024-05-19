@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import { Button, Link } from "@nextui-org/react"
 import { useRegisterMutation } from "../app/services/userApi"
 import { ErrorMessage } from "../components/error-message"
+import {hasErrorField} from "../utils/has-error-filed";
 import { useState } from "react"
 
 type Register = {
@@ -38,9 +39,9 @@ export const Register = ({ setSelected }: Props) => {
             await register(data).unwrap()
             setSelected("login")
         } catch (err) {
-            // if (hasErrorField(err)) {
-            //     setError(err.data.error)
-            // }
+            if (hasErrorField(err)) {
+                setError(err.data.error)
+            }
         }
     }
 

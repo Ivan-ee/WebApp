@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { ErrorMessage } from "../components/error-message"
+import {hasErrorField} from "../utils/has-error-filed";
 
 type Login = {
     email: string
@@ -43,9 +44,9 @@ export const Login = ({ setSelected }: Props) => {
             await triggerCurrentQuery()
             navigate("/")
         } catch (err) {
-            // if (hasErrorField(err)) {
-            //     setError(err.data.error)
-            // }
+            if (hasErrorField(err)) {
+                setError(err.data.error)
+            }
         }
     }
     return (
