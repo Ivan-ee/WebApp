@@ -22,6 +22,7 @@ import {ProfileInfo} from "../../components/profile-info";
 import {CountInfo} from "../../components/count-info";
 import {FormatToClient} from "../../utils/format-to-client";
 import {resetUser, selectCurrent} from "../../features/userSlice";
+import {EditProfile} from "../../components/edit-profile";
 
 
 export const UserProfile = () => {
@@ -127,7 +128,7 @@ export const UserProfile = () => {
                     </div>
                 </Card>
             </div>
-            {/*<EditProfile isOpen={isOpen} onClose={handleClose} user={data} />*/}
+            <EditProfile isOpen={isOpen} onClose={handleClose} user={data} />
         </>
     )
 }
