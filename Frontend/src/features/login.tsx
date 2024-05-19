@@ -7,7 +7,7 @@ import {
 } from "../app/services/userApi"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { Index } from "../components/error-message"
+import { ErrorMessage } from "../components/error-message"
 
 type Login = {
     email: string
@@ -43,7 +43,7 @@ export const Login = ({ setSelected }: Props) => {
             await triggerCurrentQuery()
             navigate("/")
         } catch (err) {
-            // if (hasEr rorField(err)) {
+            // if (hasErrorField(err)) {
             //     setError(err.data.error)
             // }
         }
@@ -64,7 +64,7 @@ export const Login = ({ setSelected }: Props) => {
                 type="password"
                 required="Обязательное поле"
             />
-            <Index error={error} />
+            <ErrorMessage error={error} />
             <p className="text-center text-small">
                 Нет аккаутна?{" "}
                 <Link

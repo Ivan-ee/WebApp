@@ -2,7 +2,7 @@ import { Input } from "../components/input/input"
 import { useForm } from "react-hook-form"
 import { Button, Link } from "@nextui-org/react"
 import { useRegisterMutation } from "../app/services/userApi"
-import { Index } from "../components/error-message"
+import { ErrorMessage } from "../components/error-message"
 import { useState } from "react"
 
 type Register = {
@@ -66,7 +66,7 @@ export const Register = ({ setSelected }: Props) => {
                 type="password"
                 required="Обязательное поле"
             />
-            <Index error={error} />
+            <ErrorMessage error={error} />
 
             <p className="text-center text-small">
                 Уже есть аккаунт?{" "}
