@@ -1,6 +1,7 @@
 import {Card} from "../../components/cart"
-import {CreatePost} from "../../components/create-post"
+
 import {useGetAllPostsQuery} from "../../app/services/postApi"
+import {CreatePost} from "../../components/create-post";
 
 export const Posts = () => {
     const {data} = useGetAllPostsQuery()

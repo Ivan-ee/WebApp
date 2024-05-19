@@ -1,20 +1,22 @@
-import {useCreatePostMutation, useLazyGetAllPostsQuery} from "../app/services/postApi";
-import {Controller, useForm} from "react-hook-form";
-import {Button, Textarea} from "@nextui-org/react";
-import {IoMdCreate} from "react-icons/io";
-import {ErrorMessage} from "./error-message";
 
+import { Button, Textarea } from "@nextui-org/react"
+import { IoMdCreate } from "react-icons/io"
+import {
+    useCreatePostMutation,
+    useLazyGetAllPostsQuery,
+} from "../../app/services/postApi"
+import { useForm, Controller } from "react-hook-form"
+import { ErrorMessage } from "../error-message"
 
 export const CreatePost = () => {
-    const [createPost] = useCreatePostMutation();
-    const [triggerGetAllPosts] = useLazyGetAllPostsQuery();
-
+    const [createPost] = useCreatePostMutation()
+    const [triggerGetAllPosts] = useLazyGetAllPostsQuery()
     const {
         handleSubmit,
         control,
-        formState: {errors},
-        setValue
-    } = useForm();
+        formState: { errors },
+        setValue,
+    } = useForm()
 
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -25,8 +27,7 @@ export const CreatePost = () => {
             console.log("err", error)
         }
     })
-
-    const error = errors?.post?.message as string;
+    const error = errors?.post?.message as string
 
     return (
         <form className="flex-grow" onSubmit={onSubmit}>
@@ -37,7 +38,7 @@ export const CreatePost = () => {
                 rules={{
                     required: "Обязательное поле",
                 }}
-                render={({field}) => (
+                render={({ field }) => (
                     <Textarea
                         {...field}
                         labelPlacement="outside"
@@ -46,11 +47,11 @@ export const CreatePost = () => {
                     />
                 )}
             />
-            {errors && <ErrorMessage error={error}/>}
+            {errors && <ErrorMessage error={error} />}
             <Button
                 color="success"
                 className="flex-end"
-                endContent={<IoMdCreate/>}
+                endContent={<IoMdCreate />}
                 type="submit"
             >
                 Добавить пост
