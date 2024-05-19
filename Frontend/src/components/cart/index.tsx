@@ -68,8 +68,6 @@ export const Card = ({
                 await triggerGetAllPosts().unwrap()
                 break
             case "current-post":
-                await triggerGetAllPosts().unwrap()
-                break
             case "comment":
                 await triggerGetPostById(id).unwrap()
                 break
