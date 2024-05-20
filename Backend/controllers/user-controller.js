@@ -20,7 +20,8 @@ const UserController = {
                 return res.status(400).json({error: 'Пользователь с таким email уже существует.'});
             }
 
-            const hashedPassword = await bcrypt.hash(password, 12);
+            const salt = bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
 
             const png = jdenticon.toPng(name, 200);
             const avatarName = `${name}_${Date.now()}.png`;
@@ -43,7 +44,6 @@ const UserController = {
             res.status(500).json({error: e});
         }
     },
-
     login: async (req, res) => {
         const {email, password} = req.body;
 
@@ -73,7 +73,6 @@ const UserController = {
             res.status(500).json({error: e});
         }
     },
-
     getUserById: async (req, res) => {
         const {id} = req.params;
         const userId = req.user.id;
