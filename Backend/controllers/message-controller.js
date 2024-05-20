@@ -1,62 +1,68 @@
-const {prisma} = require("../prisma/prisma-client");
+const { prisma } = require("../prisma/prisma-client");
 
 const MessageController = {
     send: async (req, res) => {
-        const {id: receiverId} = req.params;
-        const senderId = req.user.id;
-        const {message} = req.body;
+        const { id: receiverId } = req.params;
+        const senderId = req.user.userId;
+        const { message } = req.body;
+
+        console.log(message)
 
         try {
-            let conversation = await prisma.conversation.findFirst({
+            // Поиск существующей комнаты с обоими участниками
+            let room = await prisma.room.findFirst({
                 where: {
                     participants: {
-                        every: {
-                            userId: {
-                                in: [senderId, receiverId],
-                            },
+                        some: {
+                            userId: senderId,
+                        },
+                        some: {
+                            userId: receiverId,
                         },
                     },
                 },
             });
 
-            if (!conversation) {
-                conversation = await prisma.conversation.create({
+            // Если комната не найдена, создать новую
+            if (!room) {
+                room = await prisma.room.create({
                     data: {
                         participants: {
                             create: [
-                                {userId: senderId},
-                                {userId: receiverId},
+                                { userId: senderId },
+                                { userId: receiverId },
                             ],
                         },
                     },
                 });
             }
 
+            // Создание нового сообщения
             const newMessage = await prisma.message.create({
                 data: {
-                    content: message,
+                    message: message, // исправлено с content на message для соответствия модели
                     senderId: senderId,
                     receiverId: receiverId,
-                    conversationId: conversation.id, // Assign conversation ID to the message
+                    roomId: room.id, // исправлено с conversationId на roomId
                 },
             });
 
-            // 3. Update the conversation to include the new message
-            const updatedConversation = await prisma.conversation.update({
+            // Обновление комнаты, чтобы включить новое сообщение
+            await prisma.room.update({
                 where: {
-                    id: conversation.id,
+                    id: room.id,
                 },
                 data: {
                     messages: {
-                        push: newMessage.id,
+                        connect: { id: newMessage.id },
                     },
                 },
             });
 
             return res.status(200).send(newMessage);
         } catch (error) {
-            console.error("err", error);
-            res.status(500).json({error: error});
+            console.error("Error:", error);
+            res.status(500).json({ error: error.message });
         }
     },
 };
