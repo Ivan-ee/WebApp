@@ -177,6 +177,35 @@ const UserController = {
             res.status(500).json({error: "Что-то пошло не так"});
         }
     },
+    all: async (req, res) => {
+        const userId = req.user.userId;
+
+        try {
+            const users = await prisma.user.findMany({
+                where: {
+                    id: {
+                        not: userId,
+                    },
+                },
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    avatarUrl: true,
+                    dateOfBirth: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    bio: true,
+                    location: true,
+                },
+            });
+
+            return res.status(200).json(users)
+        } catch (error) {
+            console.log('err', error)
+            res.status(500).json({error: "Что-то пошло не так"});
+        }
+    },
 }
 
 module.exports = UserController;
