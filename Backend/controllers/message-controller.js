@@ -9,7 +9,6 @@ const MessageController = {
         console.log(message)
 
         try {
-            // Поиск существующей комнаты с обоими участниками
             let room = await prisma.room.findFirst({
                 where: {
                     participants: {
@@ -23,7 +22,6 @@ const MessageController = {
                 },
             });
 
-            // Если комната не найдена, создать новую
             if (!room) {
                 room = await prisma.room.create({
                     data: {
@@ -37,17 +35,15 @@ const MessageController = {
                 });
             }
 
-            // Создание нового сообщения
             const newMessage = await prisma.message.create({
                 data: {
-                    message: message, // исправлено с content на message для соответствия модели
+                    message: message,
                     senderId: senderId,
                     receiverId: receiverId,
-                    roomId: room.id, // исправлено с conversationId на roomId
+                    roomId: room.id,
                 },
             });
 
-            // Обновление комнаты, чтобы включить новое сообщение
             await prisma.room.update({
                 where: {
                     id: room.id,
@@ -60,6 +56,39 @@ const MessageController = {
             });
 
             return res.status(200).send(newMessage);
+        } catch (error) {
+            console.error("Error:", error);
+            res.status(500).json({ error: error.message });
+        }
+    },
+    get: async (req, res) => {
+        const { id: userToChatId } = req.params;
+        const senderId = req.user.userId;
+
+        try {
+            let room = await prisma.room.findFirst({
+                where: {
+                    participants: {
+                        some: {
+                            userId: senderId,
+                        },
+                        some: {
+                            userId: userToChatId,
+                        },
+                    },
+                },
+                include: {
+                    messages: true,
+                }
+            });
+
+            if (!room) {
+                return res.status(404).send('Диалог не найден');
+            }
+
+            const messages = room.messages;
+
+            return res.status(200).send(messages);
         } catch (error) {
             console.error("Error:", error);
             res.status(500).json({ error: error.message });

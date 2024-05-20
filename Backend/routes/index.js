@@ -37,5 +37,6 @@ router.post('/follow', authToken, FollowController.follow);
 router.delete('/unfollow/:id', authToken, FollowController.unfollow);
 
 router.post('/send/:id', authToken, MessageController.send);
+router.get('/get/:id', authToken, MessageController.get);
 
 module.exports = router;
