@@ -8,25 +8,24 @@ datasource db {
 }
 
 model User {
-  id               String       @id @default(auto()) @map("_id") @db.ObjectId
-  email            String       @unique
+  id               String                    @id @default(auto()) @map("_id") @db.ObjectId
+  email            String                    @unique
   password         String
   name             String?
   avatarUrl        String?
   dateOfBirth      DateTime?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
   bio              String?
   location         String?
   posts            Post[]
   likes            Like[]
   comments         Comment[]
-  followers        Follows[]    @relation("following")
-  following        Follows[]    @relation("follower")
-  sentMessages     Message[]    @relation("sender")
-  receivedMessages Message[]    @relation("receiver")
-  conversation     Conversation @relation("participant", fields: [conversationId], references: [id])
-  conversationId   String       @db.ObjectId
+  followers        Follows[]                 @relation("following")
+  following        Follows[]                 @relation("follower")
+  sentMessages     Message[]                 @relation("Sender")
+  receivedMessages Message[]                 @relation("Receiver")
+  rooms            RoomParticipant[]
 }
 
 model Follows {
@@ -65,21 +64,30 @@ model Comment {
 }
 
 model Message {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  sender         User         @relation("sender", fields: [senderId], references: [id])
-  senderId       String       @db.ObjectId
-  receiver       User         @relation("receiver", fields: [receiverId], references: [id])
-  receiverId     String       @db.ObjectId
-  content        String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  conversationId String       @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  sender     User     @relation("Sender", fields: [senderId], references: [id])
+  senderId   String   @db.ObjectId
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+  receiverId String   @db.ObjectId
+  message    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  room       Room     @relation(fields: [roomId], references: [id])
+  roomId     String   @db.ObjectId
 }
 
-model Conversation {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  participants User[]    @relation("participant")
+model Room {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  participants RoomParticipant[]
   messages     Message[]
-  createdAt    DateTime  @default(now())
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model RoomParticipant {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  roomId    String  @db.ObjectId
+  userId    String  @db.ObjectId
+  room      Room    @relation(fields: [roomId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
 }

@@ -20,8 +20,7 @@ const UserController = {
                 return res.status(400).json({error: 'Пользователь с таким email уже существует.'});
             }
 
-            const salt = bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
+            const hashedPassword = await bcrypt.hash(password, 12);
 
             const png = jdenticon.toPng(name, 200);
             const avatarName = `${name}_${Date.now()}.png`;
