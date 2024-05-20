@@ -64,7 +64,7 @@ const UserController = {
                 return res.status(400).json({error: 'Неверный логин или пароль'});
             }
 
-            const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET)
+            const token = jwt.sign({userId: user.id}, '123')
 
             return res.status(200).json({token});
 
