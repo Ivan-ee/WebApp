@@ -40,4 +40,8 @@ router.delete('/unfollow/:id', authToken, FollowController.unfollow);
 router.post('/send/:id', authToken, MessageController.send);
 router.get('/get/:id', authToken, MessageController.get);
 
+router.all('*', (req, res) => {
+    res.status(404).json({ message: 'Страница не найдена' });
+});
+
 module.exports = router;

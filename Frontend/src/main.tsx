@@ -15,6 +15,7 @@ import {UserProfile} from "./pages/user-profile";
 import {Followers} from "./pages/followers";
 import {Following} from "./pages/following";
 import {AuthGuard} from "./features/authGuard";
+import NotFound from './pages/not-found';
 import { Chats } from "./pages/chats"
 
 const container = document.getElementById("root")
@@ -53,7 +54,11 @@ const router = createBrowserRouter([
             //     element: <Chats/>
             // },
         ]
-    }
+    },
+    {
+        path: '*',
+        element: <NotFound/>
+    },
 ])
 
 if (container) {
