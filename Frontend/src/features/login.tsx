@@ -71,7 +71,7 @@ export const Login = ({ setSelected }: Props) => {
                 <Link
                     size="sm"
                     className="cursor-pointer"
-                    onPress={() => setSelected("sign-up")}
+                    onPress={() => setSelected("sing-in")}
                 >
                     Зарегистрируйтесь
                 </Link>

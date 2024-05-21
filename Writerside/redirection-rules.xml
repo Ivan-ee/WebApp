@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules SYSTEM "https://resources.jetbrains.com/writerside/1.0/redirection-rules.dtd">
+<rules>
+    <!-- format is as follows
+    <rule id="<unique id>">
+        <accepts>page.html</accepts>
+    </rule>
+    -->
+    <rule id="5fcaf974">
+        <description>Created after removal of "d" from Документация</description>
+        <accepts>d.html</accepts>
+    </rule>
+    <rule id="6c892149">
+        <description>Created after removal of "2" from Документация</description>
+        <accepts>2.html</accepts>
+    </rule>
+    <rule id="54ddcce9">
+        <description>Created after removal of "3" from Документация</description>
+        <accepts>3.html</accepts>
+    </rule>
+</rules>
