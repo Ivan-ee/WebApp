@@ -29,13 +29,13 @@ export const Feedback: React.FC = () => {
   const error = errors?.message?.message as string
 
   const handleTelegramRedirect = (data: FormData) => {
-    const telegramUsername = "smirnowwwivan";
-    const { name, nickname, message } = data;
-    const text = `Name: ${name} Email: ${nickname} Message: ${message}`;
-    const encodedText = encodeURIComponent(text);
-    const url = `https://t.me/${telegramUsername}?text=${encodedText}`;
-    window.open(url, "_blank");
-  };
+    const telegramUsername = "smirnowwwivan"
+    const { name, nickname, message } = data
+    const text = `Name: ${name} Email: ${nickname} Message: ${message}`
+    const encodedText = encodeURIComponent(text)
+    const url = `https://t.me/${telegramUsername}?text=${encodedText}`
+    window.open(url, "_blank")
+  }
 
   return (
 
@@ -43,7 +43,7 @@ export const Feedback: React.FC = () => {
       <Card className="max-w-md w-full">
         <form onSubmit={handleSubmit(handleTelegramRedirect)}>
           <CardBody className="space-y-4">
-            <h2 className="text-center text-2xl font-bold">Свяжитесь с нами</h2>
+            <h2 className="text-center text-2xl font-bold">Напиши мне</h2>
             <Input
               control={control}
               name="name"
@@ -70,7 +70,7 @@ export const Feedback: React.FC = () => {
                 <Textarea
                   {...field}
                   labelPlacement="outside"
-                  placeholder="О чем думайте?"
+                  placeholder="Присылай своё тайное послание"
                   className="mb-5"
                 />
               )}
