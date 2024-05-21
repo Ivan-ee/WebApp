@@ -13,11 +13,6 @@ export const NavBar = () => {
                         Посты
                     </NavButton>
                 </li>
-                {/*<li>*/}
-                {/*    <NavButton icon={<IoChatboxOutline />} href='chats'>*/}
-                {/*        Чаты*/}
-                {/*    </NavButton>*/}
-                {/*</li>*/}
                 <li>
                     <NavButton icon={<FiUsers />} href='following'>
                         Подписки
@@ -26,6 +21,11 @@ export const NavBar = () => {
                 <li>
                     <NavButton icon={<FaUsers />} href='followers'>
                         Подписчики
+                    </NavButton>
+                </li>
+                <li>
+                    <NavButton icon={<IoChatboxOutline />} href='feedback'>
+                        Обратная связь
                     </NavButton>
                 </li>
             </ul>
