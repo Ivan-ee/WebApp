@@ -15,6 +15,7 @@ import {UserProfile} from "./pages/user-profile";
 import {Followers} from "./pages/followers";
 import {Following} from "./pages/following";
 import {AuthGuard} from "./features/authGuard";
+import { Chats } from "./pages/chats"
 
 const container = document.getElementById("root")
 
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             {
                 path: 'following',
                 element: <Following/>
+            },
+            {
+                path: 'chats',
+                element: <Chats/>
             },
         ]
     }

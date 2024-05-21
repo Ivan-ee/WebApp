@@ -53,3 +53,9 @@ export type Comment = {
     post: Post
     postId: string
 }
+
+export type Messenger = {
+    id: string
+    message: string
+    
+}
