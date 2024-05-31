@@ -8,24 +8,25 @@ datasource db {
 }
 
 model User {
-  id               String                    @id @default(auto()) @map("_id") @db.ObjectId
-  email            String                    @unique
-  password         String
-  name             String?
-  avatarUrl        String?
-  dateOfBirth      DateTime?
-  createdAt        DateTime                  @default(now())
-  updatedAt        DateTime                  @updatedAt
-  bio              String?
-  location         String?
-  posts            Post[]
-  likes            Like[]
-  comments         Comment[]
-  followers        Follows[]                 @relation("following")
-  following        Follows[]                 @relation("follower")
-  sentMessages     Message[]                 @relation("Sender")
-  receivedMessages Message[]                 @relation("Receiver")
-  rooms            RoomParticipant[]
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  email       String    @unique
+  password    String
+  name        String?
+  avatarUrl   String?
+  dateOfBirth DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bio         String?
+  location    String?
+  posts       Post[]
+  likes       Like[]
+  comments    Comment[]
+  followers   Follows[] @relation("following")
+  following   Follows[] @relation("follower")
+  references   Reference[]
+  // sentMessages     Message[]                 @relation("Sender")
+  // receivedMessages Message[]                 @relation("Receiver")
+  // rooms            RoomParticipant[]
 }
 
 model Follows {
@@ -43,7 +44,19 @@ model Post {
   authorId  String    @db.ObjectId
   likes     Like[]
   comments  Comment[]
+  image     String?
+  tags      Tag[]
+  theme     Theme[]
+  references  Reference[]
   createdAt DateTime  @default(now())
+}
+
+model Reference {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
 }
 
 model Like {
@@ -63,31 +76,46 @@ model Comment {
   postId  String @db.ObjectId
 }
 
-model Message {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  sender     User     @relation("Sender", fields: [senderId], references: [id])
-  senderId   String   @db.ObjectId
-  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
-  receiverId String   @db.ObjectId
-  message    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  room       Room     @relation(fields: [roomId], references: [id])
-  roomId     String   @db.ObjectId
+model Tag {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String @db.ObjectId
 }
 
-model Room {
-  id          String             @id @default(auto()) @map("_id") @db.ObjectId
-  participants RoomParticipant[]
-  messages     Message[]
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
+model Theme {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String @db.ObjectId
 }
 
-model RoomParticipant {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  roomId    String  @db.ObjectId
-  userId    String  @db.ObjectId
-  room      Room    @relation(fields: [roomId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
-}
+//
+// model Message {
+//   id         String   @id @default(auto()) @map("_id") @db.ObjectId
+//   sender     User     @relation("Sender", fields: [senderId], references: [id])
+//   senderId   String   @db.ObjectId
+//   receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+//   receiverId String   @db.ObjectId
+//   message    String
+//   createdAt  DateTime @default(now())
+//   updatedAt  DateTime @updatedAt
+//   room       Room     @relation(fields: [roomId], references: [id])
+//   roomId     String   @db.ObjectId
+// }
+//
+// model Room {
+//   id          String             @id @default(auto()) @map("_id") @db.ObjectId
+//   participants RoomParticipant[]
+//   messages     Message[]
+//   createdAt    DateTime           @default(now())
+//   updatedAt    DateTime           @updatedAt
+// }
+//
+// model RoomParticipant {
+//   id        String  @id @default(auto()) @map("_id") @db.ObjectId
+//   roomId    String  @db.ObjectId
+//   userId    String  @db.ObjectId
+//   room      Room    @relation(fields: [roomId], references: [id])
+//   user      User    @relation(fields: [userId], references: [id])
+// }
