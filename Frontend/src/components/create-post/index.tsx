@@ -7,7 +7,7 @@ import {
 import { useForm, Controller } from "react-hook-form"
 import { ErrorMessage } from "../error-message"
 import { useLazyGetAllThemesQuery } from "../../app/services/themeApi"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Theme } from "../../app/types"
 
 export const CreatePost = () => {
@@ -17,12 +17,13 @@ export const CreatePost = () => {
 
     const [themes, setThemes] = useState<Theme[]>([])
     const [textareaHasText, setTextareaHasText] = useState(false)
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
     const {
         handleSubmit,
         control,
         formState: { errors },
-        setValue,
+        setValue
     } = useForm()
 
     useEffect(() => {
@@ -33,16 +34,33 @@ export const CreatePost = () => {
             }
             fetchThemes()
         }
-    }, [textareaHasText, triggerGetAllThemes])
+    }, [textareaHasText, triggerGetAllThemes]);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files !== null) {
+            setSelectedFile(event.target.files[0])
+        }
+    };
 
     const onSubmit = handleSubmit(async (data) => {
         console.log(data)
         try {
-            await createPost({ content: data.post, themeId: data.selectedTheme }).unwrap()
-            setValue("post", "")
 
+            const formData = new FormData(); // Создайте FormData
+            formData.append("content", data.post); // Добавьте текст поста
+            formData.append("themeId", data.selectedTheme); // Добавьте выбранную тему
+
+            if (selectedFile) {
+                formData.append("postImage", selectedFile);
+            }
+
+            await createPost(formData).unwrap();
+
+            setValue("post", "")
+            setSelectedFile(null);
             setValue("selectedTheme", "")
-            setTextareaHasText(false);
+
+            setTextareaHasText(false)
             await triggerGetAllPosts().unwrap()
         } catch (error) {
             console.log("err", error)
@@ -75,28 +93,38 @@ export const CreatePost = () => {
             />
 
             {textareaHasText && (
-                <Controller
-                    name="selectedTheme"
-                    control={control}
-                    defaultValue={""}
-                    rules={{ required: "Тема не выбрана" }}
-                    render={({ field }) => (
-                        <Select className="max-w-xs" label="Выберите тему" {...field}>
-                            {themes.map((theme) => (
-                                <SelectItem key={theme.id} value={theme.id}>
-                                    {theme.name}
-                                </SelectItem>
-                            ))}
-                        </Select>
-                    )}
-                />
+                <div>
+                    <Controller
+                        name="selectedTheme"
+                        control={control}
+                        defaultValue={""}
+                        rules={{ required: "Тема не выбрана" }}
+                        render={({ field }) => (
+                            <Select className="max-w-xs" label="Выберите тему" {...field}>
+                                {themes.map((theme) => (
+                                    <SelectItem key={theme.id} value={theme.id}>
+                                        {theme.name}
+                                    </SelectItem>
+                                ))}
+                            </Select>
+                        )}
+                    />
 
-
-
+                    <input
+                        name="avatarUrl"
+                        placeholder="Выберете файл"
+                        type="file"
+                        onChange={handleFileChange}
+                    />
+                </div>
             )}
 
-            {errors && <ErrorMessage error={errorTheme} />}
-            {errors && <ErrorMessage error={errorPost} />}
+            {
+                errors && <ErrorMessage error={errorTheme} />
+            }
+            {
+                errors && <ErrorMessage error={errorPost} />
+            }
 
             <Button
                 color="success"

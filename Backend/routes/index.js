@@ -25,7 +25,7 @@ router.get('/all', authToken, UserController.all);
 router.get('/users/:id', authToken, UserController.getUserById);
 router.put('/users/:id', authToken, upload.single('avatar'), UserController.update);
 
-router.post('/posts', authToken, PostController.create);
+router.post('/posts', authToken, upload.single('postImage'), PostController.create);
 router.get('/posts', authToken, PostController.getAll);
 router.get('/posts/:id', authToken, PostController.getById);
 router.delete('/posts/:id', authToken, PostController.delete);

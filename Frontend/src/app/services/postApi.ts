@@ -3,7 +3,7 @@ import {Post} from "../types";
 
 export const postApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        createPost: builder.mutation<Post, { content: string, themeId: string }>({
+        createPost: builder.mutation<Post,  FormData>({
             query: (postData) => ({
                 url: "/posts",
                 method: "POST",

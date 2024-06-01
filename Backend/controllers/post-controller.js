@@ -14,19 +14,25 @@ const PostController = {
             return res.status(400).send({error: "Все поля обязательны"});
         }
 
+        let filePath;
+
+        if (req.file && req.file.path) {
+            filePath = req.file.path;
+        }
+
         try {
 
-            const png = jdenticon.toPng('post', 200);
-            const avatarName = `${'post'}_${Date.now()}.png`;
-            const avatarPath = path.join(__dirname, '/../uploads', avatarName);
-            fs.writeFileSync(avatarPath, png);
+            // const png = jdenticon.toPng('post', 200);
+            // const avatarName = `${'post'}_${Date.now()}.png`;
+            // const avatarPath = path.join(__dirname, '/../uploads', avatarName);
+            // fs.writeFileSync(avatarPath, png);
 
             const post = await prisma.post.create({
                 data: {
                     content: content,
                     authorId: authorId,
                     themeId: themeId,
-                    image: `/uploads/${avatarName}`,
+                    image: filePath ? `/${filePath}` : undefined,
                 }
             });
 

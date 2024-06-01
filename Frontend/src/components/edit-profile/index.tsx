@@ -5,7 +5,7 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    Textarea,
+    Textarea
 } from "@nextui-org/react"
 import React, { useContext, useState } from "react"
 import { ThemeContext } from "../theme-provider"
@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom"
 import { Input } from "../input/input"
 import { ErrorMessage } from "../error-message"
 import { MdOutlineEmail } from "react-icons/md"
-import {hasErrorField} from "../../utils/has-error-filed";
+import { hasErrorField } from "../../utils/has-error-filed"
 
 
 type Props = {
@@ -44,8 +44,8 @@ export const EditProfile: React.FC<Props> = ({
             name: user?.name,
             dateOfBirth: user?.dateOfBirth,
             bio: user?.bio,
-            location: user?.location,
-        },
+            location: user?.location
+        }
     })
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +63,7 @@ export const EditProfile: React.FC<Props> = ({
                 data.dateOfBirth &&
                 formData.append(
                     "dateOfBirth",
-                    new Date(data.dateOfBirth).toISOString(),
+                    new Date(data.dateOfBirth).toISOString()
                 )
                 data.bio && formData.append("bio", data.bio)
                 data.location && formData.append("location", data.location)
@@ -105,7 +105,12 @@ export const EditProfile: React.FC<Props> = ({
                                     type="email"
                                     endContent={<MdOutlineEmail />}
                                 />
-                                <Input control={control} name="name" label="Имя" type="text" />
+                                <Input
+                                    control={control}
+                                    name="name"
+                                    label="Имя"
+                                    type="text"
+                                />
                                 <input
                                     name="avatarUrl"
                                     placeholder="Выберете файл"
