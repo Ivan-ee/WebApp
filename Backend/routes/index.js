@@ -1,6 +1,8 @@
 const express = require('express');
 const multer = require('multer');
-const {UserController, PostController, CommentController, LikeController, FollowController, MessageController} = require("../controllers");
+const {UserController, PostController, CommentController, LikeController, FollowController, MessageController,
+    ThemeController
+} = require("../controllers");
 const {authToken} = require("../middleware/auth");
 require('dotenv').config();
 
@@ -37,8 +39,10 @@ router.delete('/likes/:id', authToken, LikeController.unlike);
 router.post('/follow', authToken, FollowController.follow);
 router.delete('/unfollow/:id', authToken, FollowController.unfollow);
 
-router.post('/send/:id', authToken, MessageController.send);
-router.get('/get/:id', authToken, MessageController.get);
+router.get('/themes', authToken, ThemeController.getAllThemes);
+
+// router.post('/send/:id', authToken, MessageController.send);
+// router.get('/get/:id', authToken, MessageController.get);
 
 router.all('*', (req, res) => {
     res.status(404).json({ message: 'Страница не найдена' });

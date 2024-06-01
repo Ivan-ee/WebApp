@@ -1,33 +1,52 @@
-
-import { Button, Textarea } from "@nextui-org/react"
+import { Button, Textarea, Select, SelectItem } from "@nextui-org/react"
 import { IoMdCreate } from "react-icons/io"
 import {
     useCreatePostMutation,
-    useLazyGetAllPostsQuery,
+    useLazyGetAllPostsQuery
 } from "../../app/services/postApi"
 import { useForm, Controller } from "react-hook-form"
 import { ErrorMessage } from "../error-message"
+import { useLazyGetAllThemesQuery } from "../../app/services/themeApi"
+import { useEffect, useState } from "react"
+import { Theme } from "../../app/types"
 
 export const CreatePost = () => {
     const [createPost] = useCreatePostMutation()
     const [triggerGetAllPosts] = useLazyGetAllPostsQuery()
+    const [triggerGetAllThemes] = useLazyGetAllThemesQuery()
+
+    const [themes, setThemes] = useState<Theme[]>([])
+    const [textareaHasText, setTextareaHasText] = useState(false)
+
     const {
         handleSubmit,
         control,
         formState: { errors },
-        setValue,
+        setValue
     } = useForm()
 
+    useEffect(() => {
+        if (textareaHasText) {
+            const fetchThemes = async () => {
+                const response = await triggerGetAllThemes().unwrap()
+                setThemes(response)
+            }
+            fetchThemes()
+        }
+    }, [textareaHasText, triggerGetAllThemes])
+
     const onSubmit = handleSubmit(async (data) => {
+        console.log(data)
         try {
-            await createPost({ content: data.post }).unwrap()
+            await createPost({ content: data.post, themeId: data.selectedTheme }).unwrap()
             setValue("post", "")
             await triggerGetAllPosts().unwrap()
         } catch (error) {
             console.log("err", error)
         }
     })
-    const error = errors?.post?.message as string
+    const errorPost = errors?.post?.message as string
+    const errorTheme = errors?.selectedTheme?.message as string
 
     return (
         <form className="flex-grow" onSubmit={onSubmit}>
@@ -36,7 +55,7 @@ export const CreatePost = () => {
                 control={control}
                 defaultValue=""
                 rules={{
-                    required: "Обязательное поле",
+                    required: "Текст поста отсутсвует"
                 }}
                 render={({ field }) => (
                     <Textarea
@@ -44,10 +63,38 @@ export const CreatePost = () => {
                         labelPlacement="outside"
                         placeholder="О чем думайте?"
                         className="mb-5"
+                        onChange={(e) => {
+                            setTextareaHasText(e.target.value.trim() !== "")
+                            field.onChange(e)
+                        }}
                     />
                 )}
             />
-            {errors && <ErrorMessage error={error} />}
+
+            {textareaHasText && (
+                <Controller
+                    name="selectedTheme"
+                    control={control}
+                    defaultValue={""}
+                    rules={{ required: "Тема не выбрана" }}
+                    render={({ field }) => (
+                        <Select className="max-w-xs" label="Выберите тему" {...field}>
+                            {themes.map((theme) => (
+                                <SelectItem key={theme.id} value={theme.id}>
+                                    {theme.name}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                    )}
+                />
+
+
+
+            )}
+
+            {errors && <ErrorMessage error={errorTheme} />}
+            {errors && <ErrorMessage error={errorPost} />}
+
             <Button
                 color="success"
                 className="flex-end"

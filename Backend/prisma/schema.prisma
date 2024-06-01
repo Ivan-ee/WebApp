@@ -8,22 +8,22 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  email       String    @unique
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  email       String      @unique
   password    String
   name        String?
   avatarUrl   String?
   dateOfBirth DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   bio         String?
   location    String?
   posts       Post[]
   likes       Like[]
   comments    Comment[]
-  followers   Follows[] @relation("following")
-  following   Follows[] @relation("follower")
-  references   Reference[]
+  followers   Follows[]   @relation("following")
+  following   Follows[]   @relation("follower")
+  references  Reference[]
   // sentMessages     Message[]                 @relation("Sender")
   // receivedMessages Message[]                 @relation("Receiver")
   // rooms            RoomParticipant[]
@@ -38,17 +38,18 @@ model Follows {
 }
 
 model Post {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  content   String
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String    @db.ObjectId
-  likes     Like[]
-  comments  Comment[]
-  image     String?
-  tags      Tag[]
-  theme     Theme[]
-  references  Reference[]
-  createdAt DateTime  @default(now())
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  content    String
+  author     User        @relation(fields: [authorId], references: [id])
+  authorId   String      @db.ObjectId
+  likes      Like[]
+  comments   Comment[]
+  image      String?
+  tags       Tag[]
+  theme      Theme       @relation(fields: [themeId], references: [id])
+  themeId    String      @db.ObjectId
+  references Reference[]
+  createdAt  DateTime    @default(now())
 }
 
 model Reference {
@@ -84,10 +85,9 @@ model Tag {
 }
 
 model Theme {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String
-  post   Post   @relation(fields: [postId], references: [id])
-  postId String @db.ObjectId
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  posts Post[]
 }
 
 //

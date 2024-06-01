@@ -30,6 +30,7 @@ export type Post = {
     content: string
     author: User
     authorId: string
+    themeId: string
     likes: Like[]
     comments: Comment[]
     likedByUser: boolean
@@ -54,8 +55,14 @@ export type Comment = {
     postId: string
 }
 
-export type Messenger = {
+export type Theme = {
     id: string
-    message: string
-    
+    name: string
+    post: Post
 }
+
+// export type Messenger = {
+//     id: string
+//     message: string
+//
+// }

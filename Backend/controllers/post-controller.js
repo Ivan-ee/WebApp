@@ -1,9 +1,12 @@
 const {prisma} = require("../prisma/prisma-client");
+const jdenticon = require("jdenticon");
+const path = require("path");
+const fs = require("fs");
 
 const PostController = {
     create: async (req, res) => {
 
-        const {content} = req.body;
+        const {content, themeId} = req.body;
 
         const authorId = req.user.userId;
 
@@ -13,10 +16,17 @@ const PostController = {
 
         try {
 
+            const png = jdenticon.toPng('post', 200);
+            const avatarName = `${'post'}_${Date.now()}.png`;
+            const avatarPath = path.join(__dirname, '/../uploads', avatarName);
+            fs.writeFileSync(avatarPath, png);
+
             const post = await prisma.post.create({
                 data: {
                     content: content,
-                    authorId: authorId
+                    authorId: authorId,
+                    themeId: themeId,
+                    image: `/uploads/${avatarName}`,
                 }
             });
 
