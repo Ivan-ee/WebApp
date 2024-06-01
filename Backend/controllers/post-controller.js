@@ -14,12 +14,12 @@ const PostController = {
             return res.status(400).send({error: "Все поля обязательны"});
         }
 
-        const contentWithLinks = content.replace(
+        const contentWithTag = content.replace(
             /(^|\s)(#[\wа-яА-Я]+)/g,
             (match, before, hashtag) => `${before}<a href="/search?q=${hashtag.slice(1)}" style="color: blue; text-decoration: underline;">${hashtag}</a>`
         );
 
-        console.log(contentWithLinks)
+        console.log(contentWithTag)
 
         let filePath;
 
@@ -31,7 +31,7 @@ const PostController = {
 
             const post = await prisma.post.create({
                 data: {
-                    content: contentWithLinks,
+                    content: contentWithTag,
                     authorId: authorId,
                     themeId: themeId,
                     image: filePath ? `/${filePath}` : undefined,

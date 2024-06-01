@@ -12,7 +12,7 @@ export const Profile = () => {
 
     if (!current) return null;
 
-    const { name, email, avatarUrl, id} = current;
+    const { name,nickname, avatarUrl, id} = current;
 
     return (
         <Card className="py-4 w-[302px]">
@@ -30,7 +30,7 @@ export const Profile = () => {
                 </Link>
                 <p className="text-default-500 flex items-center gap-2">
                     <MdAlternateEmail />
-                    {email}
+                    {nickname}
                 </p>
             </CardBody>
         </Card>

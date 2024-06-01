@@ -7,17 +7,23 @@ const jwt = require('jsonwebtoken');
 
 const UserController = {
     register: async (req, res) => {
-        const {name, email, password} = req.body;
+        const {name, nickname, email, password} = req.body;
 
-        if (!email || !password || !name) {
+        if (!email || !password || !name || !nickname) {
             return res.status(400).json({error: 'Все поля обязатеьны.'});
         }
 
         try {
-            const existingUser = await prisma.user.findUnique({where: {email: email}});
+            const existingEmail = await prisma.user.findUnique({where: {email: email}});
 
-            if (existingUser) {
+            if (existingEmail) {
                 return res.status(400).json({error: 'Пользователь с таким email уже существует.'});
+            }
+
+            const existingNickname = await prisma.user.findUnique({where: {nickname: nickname}});
+
+            if (existingNickname) {
+                return res.status(400).json({error: 'Пользователь с таким nickname уже существует.'});
             }
 
             const hashedPassword = await bcrypt.hash(password, 12);
@@ -31,6 +37,7 @@ const UserController = {
                 data: {
                     name: name,
                     email: email,
+                    nickname: nickname,
                     password: hashedPassword,
                     avatarUrl: `/uploads/${avatarName}`,
                 }

@@ -10,6 +10,7 @@ type Register = {
     email: string
     name: string
     password: string
+    nickname: string
 }
 
 type Props = {
@@ -27,6 +28,7 @@ export const Register = ({ setSelected }: Props) => {
         defaultValues: {
             email: "",
             password: "",
+            nickname: "",
             name: "",
         },
     })
@@ -52,6 +54,13 @@ export const Register = ({ setSelected }: Props) => {
                 required="Обязательное поле"
                 label="Имя"
                 name="name"
+            />
+            <Input
+                control={control}
+                name="nickname"
+                label="Ник"
+                type="text"
+                required="Обязательное поле"
             />
             <Input
                 control={control}
