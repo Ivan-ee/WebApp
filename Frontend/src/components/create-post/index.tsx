@@ -22,7 +22,7 @@ export const CreatePost = () => {
         handleSubmit,
         control,
         formState: { errors },
-        setValue
+        setValue,
     } = useForm()
 
     useEffect(() => {
@@ -40,6 +40,9 @@ export const CreatePost = () => {
         try {
             await createPost({ content: data.post, themeId: data.selectedTheme }).unwrap()
             setValue("post", "")
+
+            setValue("selectedTheme", "")
+            setTextareaHasText(false);
             await triggerGetAllPosts().unwrap()
         } catch (error) {
             console.log("err", error)
