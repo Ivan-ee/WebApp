@@ -31,6 +31,7 @@ export type Post = {
     author: User
     authorId: string
     themeId: string
+    theme: Theme
     image?: string
     likes: Like[]
     comments: Comment[]

@@ -1,10 +1,10 @@
-
 import {
     Card as NextUiCard,
     CardHeader,
     CardBody,
-    CardFooter,
+    CardFooter
 } from "@nextui-org/react"
+import {BASE_URL} from "../../constants"
 // import { MetaInfo } from "../meta-info"
 import { Typography } from "../typography"
 import { FormatToClient } from "../../utils/format-to-client"
@@ -14,16 +14,17 @@ import { FaRegComment } from "react-icons/fa6"
 import { FcDislike } from "react-icons/fc"
 import { MdOutlineFavoriteBorder } from "react-icons/md"
 import { RiDeleteBinLine } from "react-icons/ri"
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSelector } from "react-redux"
 import { useDeleteCommentMutation } from "../../app/services/commentsApi"
 import { Spinner } from "@nextui-org/react"
 import { ErrorMessage } from "../error-message"
 import { useState } from "react"
-import {useLikePostMutation, useUnlikePostMutation} from "../../app/services/likeApi";
-import {useDeletePostMutation, useLazyGetAllPostsQuery, useLazyGetPostByIdQuery} from "../../app/services/postApi";
-import {selectCurrent} from "../../features/userSlice";
-import {hasErrorField} from "../../utils/has-error-filed";
-import {MetaInfo} from "../meta-info";
+import { useLikePostMutation, useUnlikePostMutation } from "../../app/services/likeApi"
+import { useDeletePostMutation, useLazyGetAllPostsQuery, useLazyGetPostByIdQuery } from "../../app/services/postApi"
+import { selectCurrent } from "../../features/userSlice"
+import { hasErrorField } from "../../utils/has-error-filed"
+import { MetaInfo } from "../meta-info"
 
 type Props = {
     avatarUrl: string
@@ -37,6 +38,8 @@ type Props = {
     id?: string
     cardFor: "comment" | "post" | "current-post"
     likedByUser?: boolean
+    theme: string
+    postImage?: string
 }
 
 export const Card = ({
@@ -51,6 +54,8 @@ export const Card = ({
                          likedByUser = false,
                          createdAt,
                          commentId = "",
+                         theme = "",
+                         postImage = ""
                      }: Props) => {
     const [likePost] = useLikePostMutation()
     const [unlikePost] = useUnlikePostMutation()
@@ -75,6 +80,7 @@ export const Card = ({
                 throw new Error("Неверный аргумент cardFor")
         }
     }
+
 
     const handleClick = async () => {
         try {
@@ -101,7 +107,7 @@ export const Card = ({
                     break
                 case "current-post":
                     await deletePost(id).unwrap()
-                    navigate('/')
+                    navigate("/")
                     break
                 case "comment":
                     await deleteComment(commentId).unwrap()
@@ -120,6 +126,8 @@ export const Card = ({
             }
         }
     }
+
+    console.log(avatarUrl)
 
     return (
         <NextUiCard className="mb-5">
@@ -144,9 +152,19 @@ export const Card = ({
             </CardHeader>
             <CardBody className="px-3 py-2 mb-5">
                 <Typography>{content}</Typography>
+                {postImage && (
+                    <img
+                        src={`${BASE_URL}${postImage}`}
+                        alt="Post Avatar"
+                        className="w-auto"
+                    />
+                )}
             </CardBody>
             {cardFor !== "comment" && (
                 <CardFooter className="gap-3">
+                    <div className="mt-2">
+                        {theme && <p className="text-gray-600">{theme}</p>}
+                    </div>
                     <div className="flex gap-5 items-center">
                         <div onClick={handleClick}>
                             <MetaInfo

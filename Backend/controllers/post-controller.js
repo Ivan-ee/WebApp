@@ -51,6 +51,7 @@ const PostController = {
                     author: true,
                     likes: true,
                     comments: true,
+                    theme: true,
                 },
                 orderBy: {
                     createdAt: 'desc'
@@ -61,7 +62,6 @@ const PostController = {
                 ...post,
                 likedByUser: post.likes.some(like => like.userId === userId)
             }));
-
             res.json(postsWithLikeInfo);
         } catch (error) {
             console.error('err', error)

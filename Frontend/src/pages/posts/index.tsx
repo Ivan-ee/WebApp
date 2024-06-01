@@ -3,6 +3,7 @@ import {Card} from "../../components/cart"
 import {useGetAllPostsQuery} from "../../app/services/postApi"
 import {CreatePost} from "../../components/create-post";
 
+
 export const Posts = () => {
     const {data} = useGetAllPostsQuery()
 
@@ -22,6 +23,8 @@ export const Posts = () => {
                          likes,
                          likedByUser,
                          createdAt,
+                         theme, // Добавьте theme в массив данных поста
+                         image
                      }) => (
                         <Card
                             key={id}
@@ -35,6 +38,8 @@ export const Posts = () => {
                             likedByUser={likedByUser}
                             createdAt={createdAt}
                             cardFor="post"
+                            theme={theme.name}
+                            postImage={image}
                         />
                     ),
                 )
