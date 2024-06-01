@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 
 type Props = {
@@ -9,10 +9,10 @@ type Props = {
 export const Typography: React.FC<Props> =
     ({
          children,
-         size = 'text-xl'
+         size = "text-xl"
 
      }) => {
         return (
-            <p className={`${size}`}>{children}</p>
+            <p className={size} dangerouslySetInnerHTML={{ __html: children }} />
         )
     }

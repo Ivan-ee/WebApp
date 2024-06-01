@@ -46,9 +46,9 @@ export const CreatePost = () => {
         console.log(data)
         try {
 
-            const formData = new FormData(); // Создайте FormData
-            formData.append("content", data.post); // Добавьте текст поста
-            formData.append("themeId", data.selectedTheme); // Добавьте выбранную тему
+            const formData = new FormData();
+            formData.append("content", data.post);
+            formData.append("themeId", data.selectedTheme);
 
             if (selectedFile) {
                 formData.append("postImage", selectedFile);

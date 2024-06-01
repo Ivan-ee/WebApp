@@ -14,6 +14,13 @@ const PostController = {
             return res.status(400).send({error: "Все поля обязательны"});
         }
 
+        const contentWithLinks = content.replace(
+            /(^|\s)(#[\wа-яА-Я]+)/g,
+            (match, before, hashtag) => `${before}<a href="/search?q=${hashtag.slice(1)}" style="color: blue; text-decoration: underline;">${hashtag}</a>`
+        );
+
+        console.log(contentWithLinks)
+
         let filePath;
 
         if (req.file && req.file.path) {
@@ -22,14 +29,9 @@ const PostController = {
 
         try {
 
-            // const png = jdenticon.toPng('post', 200);
-            // const avatarName = `${'post'}_${Date.now()}.png`;
-            // const avatarPath = path.join(__dirname, '/../uploads', avatarName);
-            // fs.writeFileSync(avatarPath, png);
-
             const post = await prisma.post.create({
                 data: {
-                    content: content,
+                    content: contentWithLinks,
                     authorId: authorId,
                     themeId: themeId,
                     image: filePath ? `/${filePath}` : undefined,
