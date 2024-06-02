@@ -1,17 +1,19 @@
-import React from 'react'
+import React from "react"
 
 type Props = {
     title: string;
     info?: string;
 }
 
-export const ProfileInfo: React.FC<Props> = ({
-                                                 title,
-                                                 info,
-                                             }) => {
+export const ProfileInfo: React.FC<Props> = (
+    {
+        title,
+        info
+    }
+) => {
 
     if (!info) {
-        return null;
+        return null
     }
 
     return (

@@ -43,7 +43,6 @@ export const CreatePost = () => {
     };
 
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data)
         try {
 
             const formData = new FormData();
@@ -53,6 +52,8 @@ export const CreatePost = () => {
             if (selectedFile) {
                 formData.append("postImage", selectedFile);
             }
+
+            console.log(formData)
 
             await createPost(formData).unwrap();
 

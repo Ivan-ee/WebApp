@@ -70,6 +70,45 @@ const PostController = {
             res.status(500).json({error: error});
         }
     },
+    update: async (req, res) => {
+        const {id} = req.params;
+
+        console.log(req.body)
+
+        const {content, themeId} = req.body;
+
+        if (!content) {
+            return res.status(400).send({error: "Все поля обязательны"});
+        }
+
+        const contentWithTag = content.replace(
+            /(^|\s)(#[\wа-яА-Я]+)/g,
+            (match, before, hashtag) => `${before}<a href="/search?q=${hashtag.slice(1)}" style="color: blue; text-decoration: underline;">${hashtag}</a>`
+        );
+
+        let filePath;
+
+        if (req.file && req.file.path) {
+            filePath = req.file.path;
+        }
+
+        try {
+
+            const post = await prisma.post.update({
+                where: {id: id},
+                data: {
+                    content: contentWithTag,
+                    themeId: themeId,
+                    image: filePath ? `/${filePath}` : undefined,
+                }
+            });
+
+            res.json(post);
+        } catch (error) {
+            console.error('err', error)
+            res.status(500).json({error: error});
+        }
+    },
     getById: async (req, res) => {
         const {id} = req.params;
 

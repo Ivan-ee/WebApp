@@ -38,6 +38,7 @@ export const CurrentPost = () => {
                 id={id}
                 likedByUser={likedByUser}
                 createdAt={createdAt}
+
             />
             <div className="mt-10">
                 <CreateComment />

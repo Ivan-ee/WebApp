@@ -213,6 +213,28 @@ const UserController = {
             res.status(500).json({error: "Что-то пошло не так"});
         }
     },
+    // search: async (req, res) => {
+    //     const {query} = req.query;
+    //
+    //     try {
+    //         const users = await prisma.user.findMany({
+    //             where: {
+    //                 nickname: {
+    //                     contains: query,
+    //                     mode: 'insensitive'
+    //                 }
+    //             },
+    //             select: {
+    //                 nickname: true
+    //             }
+    //         });
+    //
+    //         res.json(users);
+    //     } catch (error) {
+    //         console.error('err', error)
+    //         res.status(500).json({error: error});
+    //     }
+    // }
 }
 
 module.exports = UserController;

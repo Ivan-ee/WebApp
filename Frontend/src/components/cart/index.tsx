@@ -2,10 +2,10 @@ import {
     Card as NextUiCard,
     CardHeader,
     CardBody,
-    CardFooter
+    CardFooter, Button
 } from "@nextui-org/react"
-import {BASE_URL} from "../../constants"
-// import { MetaInfo } from "../meta-info"
+import {CiEdit} from "react-icons/ci"
+import { BASE_URL } from "../../constants"
 import { Typography } from "../typography"
 import { FormatToClient } from "../../utils/format-to-client"
 import { User } from "../user"
@@ -14,7 +14,6 @@ import { FaRegComment } from "react-icons/fa6"
 import { FcDislike } from "react-icons/fc"
 import { MdOutlineFavoriteBorder } from "react-icons/md"
 import { RiDeleteBinLine } from "react-icons/ri"
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSelector } from "react-redux"
 import { useDeleteCommentMutation } from "../../app/services/commentsApi"
 import { Spinner } from "@nextui-org/react"
@@ -40,6 +39,7 @@ type Props = {
     likedByUser?: boolean
     theme: string
     postImage?: string
+    onEdit: () => void
 }
 
 export const Card = ({
@@ -55,7 +55,8 @@ export const Card = ({
                          createdAt,
                          commentId = "",
                          theme = "",
-                         postImage = ""
+                         postImage = "",
+                         onEdit
                      }: Props) => {
     const [likePost] = useLikePostMutation()
     const [unlikePost] = useUnlikePostMutation()
@@ -127,8 +128,6 @@ export const Card = ({
         }
     }
 
-    console.log(avatarUrl)
-
     return (
         <NextUiCard className="mb-5">
             <CardHeader className="justify-between items-center bg-transparent">
@@ -141,12 +140,17 @@ export const Card = ({
                     />
                 </Link>
                 {authorId === currentUser?.id && (
-                    <div className="cursor-pointer" onClick={handleDelete}>
-                        {deletePostStatus.isLoading || deleteCommentStatus.isLoading ? (
-                            <Spinner />
-                        ) : (
-                            <RiDeleteBinLine />
-                        )}
+                    <div className="flex gap-2">
+                        <div className="cursor-pointer" onClick={handleDelete}>
+                            {deletePostStatus.isLoading || deleteCommentStatus.isLoading ? (
+                                <Spinner />
+                            ) : (
+                                <RiDeleteBinLine />
+                            )}
+                        </div>
+                        <div className="cursor-pointer" onClick={onEdit}>
+                            <CiEdit />
+                        </div>
                     </div>
                 )}
             </CardHeader>

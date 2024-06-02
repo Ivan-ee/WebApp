@@ -10,6 +10,14 @@ export const postApi = api.injectEndpoints({
                 body: postData,
             }),
         }),
+        updatePost: builder.mutation<Post, { postId: string; postData: FormData }>({
+            query: ({ postId, postData }) => ({
+                url: `/posts/update/${postId}`,
+                method: "PUT",
+                body: postData,
+            }),
+
+        }),
         getAllPosts: builder.query<Post[], void>({
             query: () => ({
                 url: "/posts",
@@ -38,8 +46,9 @@ export const {
     useDeletePostMutation,
     useLazyGetAllPostsQuery,
     useLazyGetPostByIdQuery,
+    useUpdatePostMutation,
 } = postApi
 
 export const {
-    endpoints: { createPost, getAllPosts, getPostById, deletePost },
+    endpoints: { createPost, getAllPosts, getPostById, deletePost, updatePost },
 } = postApi

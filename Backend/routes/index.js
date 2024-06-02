@@ -23,11 +23,13 @@ router.post('/login', UserController.login);
 router.get('/current', authToken, UserController.current);
 router.get('/all', authToken, UserController.all);
 router.get('/users/:id', authToken, UserController.getUserById);
+// router.get('/users/search', authToken, UserController.search);
 router.put('/users/:id', authToken, upload.single('avatar'), UserController.update);
 
 router.post('/posts', authToken, upload.single('postImage'), PostController.create);
 router.get('/posts', authToken, PostController.getAll);
 router.get('/posts/:id', authToken, PostController.getById);
+router.put('/posts/update/:id', authToken, upload.single('postImage'), PostController.update);
 router.delete('/posts/:id', authToken, PostController.delete);
 
 router.post('/comments', authToken, CommentController.create);
@@ -40,6 +42,7 @@ router.post('/follow', authToken, FollowController.follow);
 router.delete('/unfollow/:id', authToken, FollowController.unfollow);
 
 router.get('/themes', authToken, ThemeController.getAllThemes);
+router.get('/themes/:id', authToken, ThemeController.getThemeById);
 
 // router.post('/send/:id', authToken, MessageController.send);
 // router.get('/get/:id', authToken, MessageController.get);

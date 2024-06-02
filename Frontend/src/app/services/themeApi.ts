@@ -1,29 +1,30 @@
 import { api } from "./api"
-import { Theme } from "../types"
+import { Post, Theme } from "../types"
 
 export const themeApi = api.injectEndpoints({
-  endpoints: (builder) => ({
-    // createPost: builder.mutation<Post, { content: string }>({
-    //   query: (postData) => ({
-    //     url: "/posts",
-    //     method: "POST",
-    //     body: postData
-    //   })
-    // }),
-    getAllThemes: builder.query<Theme[], void>({
-      query: () => ({
-        url: "/themes",
-        method: "GET"
-      })
+    endpoints: (builder) => ({
+        getAllThemes: builder.query<Theme[], void>({
+            query: () => ({
+                url: "/themes",
+                method: "GET"
+            })
+        }),
+        getThemeById: builder.query<Theme, string>({
+            query: (id) => ({
+                url: `/themes/${id}`,
+                method: "GET"
+            })
+        })
     })
-  })
 })
 
 export const {
-  useGetAllThemesQuery,
-  useLazyGetAllThemesQuery
+    useGetAllThemesQuery,
+    useLazyGetAllThemesQuery,
+    useLazyGetThemeByIdQuery,
+    useGetThemeByIdQuery
 } = themeApi
 
 export const {
-  endpoints: { getAllThemes }
+    endpoints: { getAllThemes }
 } = themeApi

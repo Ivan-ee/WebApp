@@ -1,16 +1,32 @@
-import {Card} from "../../components/cart"
+import { Card } from "../../components/cart"
 
-import {useGetAllPostsQuery} from "../../app/services/postApi"
-import {CreatePost} from "../../components/create-post";
+import { useGetAllPostsQuery } from "../../app/services/postApi"
+import { CreatePost } from "../../components/create-post"
+import { EditPost } from "../../components/edit-post"
+import { useDisclosure } from "@nextui-org/react"
+import { useParams } from "react-router-dom"
+import { useState } from "react"
 
 
 export const Posts = () => {
-    const {data} = useGetAllPostsQuery()
+    const { data } = useGetAllPostsQuery()
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [selectedPost, setSelectedPost] = useState<{
+        id: string,
+        content: string,
+        themeId: string,
+        image?: string
+    } | null>(null)
+
+    const handleEditClick = (post: { id: string, content: string, themeId: string, image?: string }) => {
+        setSelectedPost(post)
+        onOpen()
+    }
 
     return (
         <>
             <div className="mb-10 w-full flex">
-                <CreatePost/>
+                <CreatePost />
             </div>
             {data && data.length > 0
                 ? data.map(
@@ -23,7 +39,7 @@ export const Posts = () => {
                          likes,
                          likedByUser,
                          createdAt,
-                         theme, // Добавьте theme в массив данных поста
+                         theme,
                          image
                      }) => (
                         <Card
@@ -40,10 +56,21 @@ export const Posts = () => {
                             cardFor="post"
                             theme={theme.name}
                             postImage={image}
+                            onEdit={() => handleEditClick({ id, content, themeId: theme.id, image })}
                         />
-                    ),
+                    )
                 )
                 : null}
+            {selectedPost && (
+                <EditPost
+                    isOpen={isOpen}
+                    onClose={() => {
+                        onClose();
+                        setSelectedPost(null);
+                    }}
+                    post={selectedPost}
+                />
+            )}
         </>
     )
 }
