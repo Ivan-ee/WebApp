@@ -56,6 +56,7 @@ export const Posts = () => {
                             cardFor="post"
                             theme={theme.name}
                             postImage={image}
+                            editMode={true}
                             onEdit={() => handleEditClick({ id, content, themeId: theme.id, image })}
                         />
                     )

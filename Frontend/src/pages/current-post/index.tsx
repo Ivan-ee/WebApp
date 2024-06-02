@@ -38,7 +38,7 @@ export const CurrentPost = () => {
                 id={id}
                 likedByUser={likedByUser}
                 createdAt={createdAt}
-
+                editMode={false}
             />
             <div className="mt-10">
                 <CreateComment />
@@ -55,6 +55,7 @@ export const CurrentPost = () => {
                             authorId={comment.userId}
                             commentId={comment.id}
                             id={id}
+                            editMode={false}
                         />
                     ))
                     : null}

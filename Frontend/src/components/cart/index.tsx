@@ -4,7 +4,7 @@ import {
     CardBody,
     CardFooter, Button
 } from "@nextui-org/react"
-import {CiEdit} from "react-icons/ci"
+import { CiEdit } from "react-icons/ci"
 import { BASE_URL } from "../../constants"
 import { Typography } from "../typography"
 import { FormatToClient } from "../../utils/format-to-client"
@@ -37,9 +37,10 @@ type Props = {
     id?: string
     cardFor: "comment" | "post" | "current-post"
     likedByUser?: boolean
-    theme: string
+    theme?: string
     postImage?: string
-    onEdit: () => void
+    onEdit?: () => void
+    editMode: boolean
 }
 
 export const Card = ({
@@ -56,7 +57,8 @@ export const Card = ({
                          commentId = "",
                          theme = "",
                          postImage = "",
-                         onEdit
+                         onEdit,
+                         editMode = false
                      }: Props) => {
     const [likePost] = useLikePostMutation()
     const [unlikePost] = useUnlikePostMutation()
@@ -148,9 +150,13 @@ export const Card = ({
                                 <RiDeleteBinLine />
                             )}
                         </div>
-                        <div className="cursor-pointer" onClick={onEdit}>
-                            <CiEdit />
-                        </div>
+                        
+                        {editMode && (
+                            <div className="cursor-pointer" onClick={onEdit}>
+                                <CiEdit />
+                            </div>
+                        )}
+
                     </div>
                 )}
             </CardHeader>
